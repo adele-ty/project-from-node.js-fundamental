@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "task1": "nodemon --exec babel-node task1_1.js",
-    "task2": "nodemon --exec babel-node task1_2",
+    "task1": "nodemon task1_1.js",
+    "task2": "nodemon task1_2",
     "commit": "git-cz"
   },
   "config": {
@@ -36,7 +36,6 @@
   "devDependencies": {
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.20.5",
-    "@babel/node": "^7.20.5",
     "@babel/preset-env": "^7.20.2",
     "commitizen": "^4.2.5",
     "cz-conventional-changelog": "^3.3.0"
