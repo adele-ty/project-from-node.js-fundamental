@@ -1,0 +1,43 @@
+{
+  "name": "project-from-node.js-fundamental",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "task1": "nodemon task1_1.js",
+    "task2": "nodemon task1_2",
+    "commit": "git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adele-ty/project-from-node.js-fundamental.git"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/newTXT.json"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adele-ty/project-from-node.js-fundamental/issues"
+  },
+  "homepage": "https://github.com/adele-ty/project-from-node.js-fundamental#readme",
+  "dependencies": {
+    "csvtojson": "^2.0.10"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "commitizen": "^4.2.5",
+    "cz-conventional-changelog": "^3.3.0"
+  }
+}
