@@ -4,7 +4,7 @@ export interface User {
     password: string,
     age: number,
     isDeleted: boolean,
-    token: string
+    login: string
 }
 
 export interface LoginInfo {

@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import { join } from 'path'
 
 export const createUpdateSchema = Joi.object({
     id: Joi.string().required(),
@@ -7,7 +6,7 @@ export const createUpdateSchema = Joi.object({
     password: Joi.string().pattern(/^(?=.{5,16})(?=.*[a-zA-Z])(?=.*[\d]).*$/).required(),
     age: Joi.number().integer().min(4).max(130).required(),
     isDeleted: Joi.boolean().required(),
-    token: Joi.string()
+    login: Joi.string().required()
 })
 
 export const loginInfoSchema = Joi.object({

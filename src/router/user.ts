@@ -17,7 +17,6 @@ router.post('/login', validator.body(loginInfoSchema),
     (req: ValidatedRequest<loginSchema>, res: Response) => {
         const { email, password } = req.body
         const user = UsersList.find(item => item.email === email)
-        console.log(process.env)
         if (user) {
             if (user.password === password) {
                 const token = jwt.sign({...user, password: ''}, process.env.JWTSecret, { expiresIn: process.env.Expires })
@@ -84,7 +83,14 @@ router.get('/getUser/:id', (req: Request, res: Response) => {
 
 // get auto suggest users
 router.get('/autoSuggestUsers', (req: Request, res: Response) => {
-    res.send('get auto suggest users!')
+    const { loginSubstr , limit } = req.query
+    const users = UsersList.filter((user) => user.login.toLowerCase().includes((loginSubstr as string).toLowerCase()))
+    const limitUsers = users.sort((a, b) => a.login.localeCompare(b.login)).slice(0, +limit)
+    res.send({
+        statusCode: 200,
+        message: 'SUCCESS',
+        data: limitUsers
+    })
 })
 
 export default router
