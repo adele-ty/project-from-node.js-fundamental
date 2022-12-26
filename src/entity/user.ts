@@ -1,7 +1,13 @@
 export interface User {
     id: string,
-    login: string,
+    email: string,
     password: string,
     age: number,
-    isDeleted: boolean
+    isDeleted: boolean,
+    token: string
+}
+
+export interface LoginInfo {
+    email: string,
+    password: string
 }
