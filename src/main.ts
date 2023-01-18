@@ -1,10 +1,8 @@
 import express, { Application } from 'express'
 import cors from 'cors'
-import userRouter from './services/user'
+import userRouter from './routers/controllers/user'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
-import db from './models'
-import { users } from './seeders/users'
 
 dotenv.config()
 const app:Application = express()
@@ -27,14 +25,6 @@ app.use((req, res, next) => {
 
 app.use('/api', userRouter)
 
-// const createUsers = () => {
-//     users.map(user => {
-//         db.User.create(user)
-//     })
-// }
-// createUsers()
-// db.sequelize.sync().then(() => {
-    app.listen(3000, function() {
-        console.log('api server running at http://127.0.0.1:3000')
-    })
-// })
+app.listen(3000, function() {
+    console.log('api server running at http://127.0.0.1:3000')
+})
