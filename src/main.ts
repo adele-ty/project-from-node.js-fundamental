@@ -1,8 +1,10 @@
 import express, { Application } from 'express'
 import cors from 'cors'
-import userRouter from './routers/controllers/user'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
+import userRouter from './routers/controllers/user'
+import groupRouter from './routers/controllers/group'
+import UserAssignRouter from './routers/controllers/userAssignment'
 
 dotenv.config()
 const app:Application = express()
@@ -24,6 +26,8 @@ app.use((req, res, next) => {
 })
 
 app.use('/api', userRouter)
+app.use('/api', groupRouter)
+app.use('/api', UserAssignRouter)
 
 app.listen(3000, function() {
     console.log('api server running at http://127.0.0.1:3000')
