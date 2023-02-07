@@ -10,7 +10,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
     permissions!: Array<Permission>;
 
     static associate (models: any) {
-      Group.belongsToMany(models.User, { through: 'UserAssignments' })
+      Group.belongsToMany(models.User, {
+        through: models.UserAssignment,
+        foreignKey: 'GroupId',
+        onDelete: 'CASCADE',
+      })
     }
   }
   Group.init({

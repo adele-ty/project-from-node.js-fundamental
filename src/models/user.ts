@@ -23,7 +23,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
     isDeleted!: boolean
 
     static associate (models: any) {
-      User.belongsToMany(models.Group, { through: 'UserAssignments' })
+      User.belongsToMany(models.Group, {
+        through: models.UserAssignment,
+        foreignKey: 'UserId',
+        onDelete: 'CASCADE',
+      })
     }
   }
   User.init({

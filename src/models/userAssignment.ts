@@ -23,7 +23,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       references: {
         model: 'Users',
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE',
     },
     GroupId: {
       type: DataTypes.UUID,
@@ -32,7 +33,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       references: {
         model: 'Groups',
         key: 'id'
-      }
+      },
+      onDelete: 'CASCADE',
     }
   }, {
     sequelize,
