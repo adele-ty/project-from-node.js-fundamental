@@ -83,8 +83,8 @@ router.delete('/removeUser/:id', async (req: Request, res: Response) => {
         }
     })
     res.send({
-        statusCode: 500,
-        message: 'FAIL'
+        statusCode: 200,
+        message: 'SUCCESS'
     })
 })
 

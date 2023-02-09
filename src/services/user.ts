@@ -27,7 +27,13 @@ const getUserById = async (id: string) => {
 }
 
 const removeUser = async (id: string) => {
-    db.User.destroy({
+    const user = await db.User.findOne({
+        where: { id }
+    });
+    await user.getGroups().then((res: any) => {
+        user.removeGroups(res)
+    })
+    await db.User.destroy({
         where: { id }
     });
 }
