@@ -3,11 +3,13 @@ import { Model } from "sequelize"
 
 interface UserAssigmentAttrs {
   UserId: string,
-  GroupId: string
+  GroupId: string,
+  id: number
 }
 module.exports = (sequelize: any, DataTypes: any) => {
   class UserAssignment extends Model<UserAssigmentAttrs>
   implements UserAssigmentAttrs {
+    id!: number
     UserId!: string;
     GroupId!: string;
 
@@ -16,10 +18,16 @@ module.exports = (sequelize: any, DataTypes: any) => {
     }
   }
   UserAssignment.init({
+    id: {
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+      type: DataTypes.INTEGER
+    },
     UserId: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: false,
       references: {
         model: 'Users',
         key: 'id'
@@ -29,7 +37,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     GroupId: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: false,
       references: {
         model: 'Groups',
         key: 'id'

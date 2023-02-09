@@ -28,7 +28,13 @@ const createAndUpdate = async (group: Group) => {
 }
 
 const removeGroup = async (id: string) => {
-    db.Group.destroy({
+    const group = await db.Group.findOne({
+        where: { id }
+    });
+    await group.getUsers().then((res: any) => {
+        group.removeUsers(res)
+    })
+    await db.Group.destroy({
         where: { id }
     });
 }

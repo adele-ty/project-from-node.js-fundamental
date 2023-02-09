@@ -46,15 +46,13 @@ router.post('/createUpdate', validator.body(groupSchema),
 })
 
 // remove a group
-router.delete('/group/:id', (req: Request, res: Response) => {
-    getAllGroups().then((GroupList) => {
-        let group = JSON.parse(GroupList).find((item: Group) => item.id === req.params.id)
-        if (group) {
-            removeGroup(req.params.id)
-        } else {
-            throw new Error('The group does not exit!')
-        }
-    })
+router.delete('/group/:id', async (req: Request, res: Response) => {
+    const group = await getGroupById(req.params.id)
+    if (group) {
+        removeGroup(req.params.id)
+    } else {
+        throw new Error('The group does not exit!')
+    }
     res.send({
         statusCode: 200,
         message: 'SUCCESS'
