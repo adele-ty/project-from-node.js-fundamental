@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 import cors from 'cors'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
+import process from 'process'
 import userRouter from './routers/controllers/user'
 import groupRouter from './routers/controllers/group'
 import UserAssignRouter from './routers/controllers/userAssignment'
@@ -28,6 +29,19 @@ app.use((req, res, next) => {
 app.use('/api', userRouter)
 app.use('/api', groupRouter)
 app.use('/api', UserAssignRouter)
+
+//错误级别中间件
+app.use((err: any, req: any, res: any, next: any) => {
+    res.send({
+        statusCode: 500,
+        message: 'Internal Sever Error!'
+    })
+    next()
+})
+
+process.on('uncaughtException', err => {
+    throw new Error(err.toString())
+})
 
 app.listen(3000, function() {
     console.log('api server running at http://127.0.0.1:3000')
