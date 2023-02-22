@@ -42,7 +42,7 @@ router.post('/login', validator.body(loginInfoSchema),
                 statusCode: 400,
                 message: 'LOGIN FAIL'
             })
-            logger.error('Login failed')
+            logger.error('Login failed', req.method, req.params)
         }
 })
 
@@ -80,7 +80,7 @@ router.get('/allUsers', async (req: Request, res: Response) => {
             statusCode: 400,
             message: 'There are no users!'
         })
-        logger.warn('There are no users!')
+        logger.warn('There are no users!', req.method, req.params)
     }
 })
 
@@ -98,7 +98,7 @@ router.delete('/removeUser/:id', async (req: Request, res: Response) => {
             statusCode: 400,
             message: 'The user does not exit!'
         })
-        logger.warn('The user does not exit! ')
+        logger.warn('The user does not exit! ', req.method, req.params)
     }
 })
 
@@ -116,7 +116,7 @@ router.get('/getUser/:id', async (req: Request, res: Response) => {
             statusCode: 400,
             message: 'The user does not exit!'
         })
-        logger.error('The user does not exit! ')
+        logger.error('The user does not exit!', req.method, req.params)
     }
 })
 
@@ -136,7 +136,7 @@ router.get('/autoSuggestUsers', async (req: Request, res: Response) => {
             statusCode: 400,
             message: 'No users to suggest!'
         })
-        logger.warn('No users to suggest!')
+        logger.warn('No users to suggest!', req.method, req.params)
     }
 })
 

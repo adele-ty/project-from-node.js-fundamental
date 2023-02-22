@@ -30,17 +30,26 @@ app.use('/api', userRouter)
 app.use('/api', groupRouter)
 app.use('/api', UserAssignRouter)
 
-//错误级别中间件
 app.use((err: any, req: any, res: any, next: any) => {
+    const { method, url, params, body } = req
     res.send({
         statusCode: 500,
-        message: 'Internal Sever Error!'
+        method,
+        url,
+        params,
+        body
     })
     next()
 })
 
 process.on('uncaughtException', err => {
     throw new Error(err.toString())
+})
+
+// Promise.reject('Invalid password')
+
+process.on('unhandledRejection', (reason, promise) => {
+    throw new Error('get a rejected promise, reason is: ' + reason)
 })
 
 app.listen(3000, function() {

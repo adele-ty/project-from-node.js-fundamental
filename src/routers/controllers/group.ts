@@ -30,7 +30,7 @@ router.get('/allGroups', async (req: Request, res: Response) => {
             statusCode: 400,
             message: 'There are no groups',
         })
-        logger.error('There are no groups!')
+        logger.error('There are no groups!', req.method, req.params)
     }
 })
 
@@ -47,7 +47,7 @@ router.get('/group/:id', (req: Request, res: Response) => {
             statusCode: 400,
             message: 'This group does not exit!',
         })
-        logger.error('This group does not exit!')
+        logger.error('This group does not exit!', req.method, req.params)
     }
 })
 
@@ -78,7 +78,7 @@ router.delete('/group/:id', async (req: Request, res: Response) => {
             statusCode: 400,
             message: 'This group does not exit!'
         })
-        logger.error('This group does not exit!')
+        logger.error('This group does not exit!', req.method, req.params)
     }
 })
 

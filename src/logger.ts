@@ -5,8 +5,9 @@ const logger = createLogger({
     format: format.combine(
         format.colorize(),
         format.timestamp(),
-        format.printf(({ timestamp, level, message }) => {
-            return `[${timestamp}] ${level}: ${message}`;
+        format.printf(({ timestamp, level, message, ...meta }) => {
+            const [method, params] = meta[Symbol.for('splat')]
+            return `[${timestamp}] ${level}: ${message} ${method} ${JSON.stringify(params)}`;
         })
     )
 })
