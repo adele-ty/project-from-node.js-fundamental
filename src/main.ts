@@ -33,7 +33,7 @@ app.use('/api', UserAssignRouter)
 
 app.use((err: any, req: any, res: any, next: any) => {
     const { method, url, params, body } = req
-    logger.error('Login failed', method, params, url, body)
+    logger.error('There are some errors', method, params, url, body)
     next()
 })
 
