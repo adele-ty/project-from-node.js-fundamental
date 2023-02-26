@@ -6,6 +6,7 @@ import process from 'process'
 import userRouter from './routers/controllers/user'
 import groupRouter from './routers/controllers/group'
 import UserAssignRouter from './routers/controllers/userAssignment'
+import logger from './logger'
 
 dotenv.config()
 const app:Application = express()
@@ -32,13 +33,7 @@ app.use('/api', UserAssignRouter)
 
 app.use((err: any, req: any, res: any, next: any) => {
     const { method, url, params, body } = req
-    res.send({
-        statusCode: 500,
-        method,
-        url,
-        params,
-        body
-    })
+    logger.error('Login failed', method, params, url, body)
     next()
 })
 
