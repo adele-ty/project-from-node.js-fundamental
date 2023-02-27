@@ -8,28 +8,47 @@ import {
     createAndUpdate,
     removeGroup
 } from '../../services/group'
+import logger from '../../logger'
 
 const router:Router = express.Router()
 const validator = createValidator()
 
 // get all groups
 router.get('/allGroups', async (req: Request, res: Response) => {
-    const groups = await getAllGroups()
-    res.send({
-        statusCode: 200,
-        message: 'SUCCESS',
-        data: JSON.parse(groups)
+    let groups: Array<Group> = []
+    await getAllGroups().then((res) => {
+        groups = JSON.parse(res)
     })
+    if (groups && groups.length !== 0) {
+        res.send({
+            statusCode: 200,
+            message: 'SUCCESS',
+            data: groups
+        })
+    } else {
+        res.send({
+            statusCode: 400,
+            message: 'There are no groups',
+        })
+        logger.error('There are no groups!', req.method, req.params)
+    }
 })
 
 // get group by id
 router.get('/group/:id', (req: Request, res: Response) => {
     const group = getGroupById(req.params.id)
+    if (group) {
     res.send({
         statusCode: 200,
         message: 'SUCCESS',
         data: group
-    })
+    })} else {
+        res.send({
+            statusCode: 400,
+            message: 'This group does not exit!',
+        })
+        logger.error('This group does not exit!', req.method, req.params)
+    }
 })
 
 // create and update group
@@ -50,13 +69,17 @@ router.delete('/group/:id', async (req: Request, res: Response) => {
     const group = await getGroupById(req.params.id)
     if (group) {
         removeGroup(req.params.id)
+        res.send({
+            statusCode: 200,
+            message: 'SUCCESS'
+        })
     } else {
-        throw new Error('The group does not exit!')
+        res.send({
+            statusCode: 400,
+            message: 'This group does not exit!'
+        })
+        logger.error('This group does not exit!', req.method, req.params)
     }
-    res.send({
-        statusCode: 200,
-        message: 'SUCCESS'
-    })
 })
 
 export default router

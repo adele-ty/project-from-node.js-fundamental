@@ -11,6 +11,7 @@ import {
     getAutoSuggest
 } from '../../services/user'
 import { login } from '../../services/login'
+import logger from '../../logger'
 
 const router:Router = express.Router()
 const validator = createValidator()
@@ -24,6 +25,7 @@ router.post('/login', validator.body(loginInfoSchema),
         const { email, password } = req.body
         let token = ''
         await login(email, password).then((result) => {
+            if (result)
             token = result
         })
         if (token) {
@@ -35,10 +37,13 @@ router.post('/login', validator.body(loginInfoSchema),
                 },
             })
         }
-        else res.send({
-            statusCode: 400,
-            message: 'LOGIN FAIL'
-        })
+        else {
+            res.send({
+                statusCode: 400,
+                message: 'LOGIN FAIL'
+            })
+            logger.error('Login failed', req.method, req.params)
+        }
 })
 
 // create and update user
@@ -48,14 +53,12 @@ interface createSchema extends ValidatedRequestSchema {
 
 router.post('/createUpdateUser', validator.body(createUpdateSchema),
     async (req: ValidatedRequest<createSchema>, res: Response) => {
-    await getAllUsers().then((UsersList) => {
-        let user = JSON.parse(UsersList).find((item: User) => item.id === req.body.id)
-        if (user) {
-            updateUser(req.body)
-        } else {
-            createUser(req.body)
-        }
-    })
+    const user = await getUserById(req.params.id)
+    if (user) {
+        updateUser(req.body)
+    } else {
+        createUser(req.body)
+    }
     res.send({
         statusCode: 200,
         message: 'SUCCESS'
@@ -64,49 +67,77 @@ router.post('/createUpdateUser', validator.body(createUpdateSchema),
 
 // get all users
 router.get('/allUsers', async (req: Request, res: Response) => {
-    const users = await getAllUsers()
-    res.send({
-        statusCode: 200,
-        message: 'SUCCESS',
-        data: JSON.parse(users)
-    })
+    let users:Array<User> = []
+    await getAllUsers().then(res => users = JSON.parse(res))
+    if (users && users.length > 0) {
+        res.send({
+            statusCode: 200,
+            message: 'SUCCESS',
+            data: users
+        })
+    } else {
+        res.send({
+            statusCode: 400,
+            message: 'There are no users!'
+        })
+        logger.warn('There are no users!', req.method, req.params)
+    }
 })
 
 // remove a user
 router.delete('/removeUser/:id', async (req: Request, res: Response) => {
-    await getAllUsers().then((UsersList) => {
-        let user = JSON.parse(UsersList).find((item: User) => item.id === req.params.id)
-        if (user) {
-            removeUser(req.params.id)
-        } else {
-            throw new Error('The user does not exit!')
-        }
-    })
-    res.send({
-        statusCode: 200,
-        message: 'SUCCESS'
-    })
+    const user = await getUserById(req.params.id)
+    if (user) {
+        removeUser(req.params.id)
+        res.send({
+            statusCode: 200,
+            message: 'SUCCESS'
+        })
+    } else {
+        res.send({
+            statusCode: 400,
+            message: 'The user does not exit!'
+        })
+        logger.warn('The user does not exit! ', req.method, req.params)
+    }
 })
 
 // get user by id
 router.get('/getUser/:id', async (req: Request, res: Response) => {
     const user = await getUserById(req.params.id)
-    res.send({
-        statusCode: 200,
-        message: 'SUCCESS',
-        data: JSON.parse(user)
-    })
+    if (user) {
+        res.send({
+            statusCode: 200,
+            message: 'SUCCESS',
+            data: JSON.parse(user)
+        })
+    } else {
+        res.send({
+            statusCode: 400,
+            message: 'The user does not exit!'
+        })
+        logger.error('The user does not exit!', req.method, req.params)
+    }
 })
 
 // get auto suggest users
 router.get('/autoSuggestUsers', async (req: Request, res: Response) => {
     const { loginSubstr , limit } = req.query
-    const users = await getAutoSuggest(loginSubstr as string, limit as string)
-    res.send({
-        statusCode: 200,
-        message: 'SUCCESS',
-        data: JSON.parse(users)
-    })
+    let users: Array<User> = []
+    await getAutoSuggest(loginSubstr as string, limit as string).then(res => users = JSON.parse(res))
+    if (users && users.length > 0) {
+        res.send({
+            statusCode: 200,
+            message: 'SUCCESS',
+            data: users
+        })
+    } else {
+        res.send({
+            statusCode: 400,
+            message: 'No users to suggest!'
+        })
+        logger.warn('No users to suggest!', req.method, req.params)
+    }
 })
 
 export default router
