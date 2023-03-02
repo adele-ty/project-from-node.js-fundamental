@@ -14,16 +14,24 @@ const app:Application = express()
 app.use(cors())
 app.use(express.json())
 app.use((req, res, next) => {
-    const isNotExpired = () => {
-        const verified: JwtPayload = jwt.verify(req.headers.authorization.split(' ')[1], process.env.JWTSecret) as JwtPayload;
+    const token = req.headers.authorization.split(' ')[1]
+    const isValidToken = (): boolean => {
+        const verified: JwtPayload = jwt.verify(token, process.env.JWTSecret) as JwtPayload;
         if (Date.now() < verified.exp * 1000) return true
         else return false
     }
+
     if (req.url === '/api/login') next()
     else {
-        const toNext: boolean = isNotExpired()
-        if (toNext) next()
-        else throw new Error('Unauthorized!')
+        if (!token.trim()) 
+            res.send({ statusCode: 401, message: 'Unauthorized!'})
+        if (isValidToken()) next()
+        else {
+            res.send({
+                statusCode: 403,
+                message: 'Forbidden!'
+            })
+        }
     }
 })
 
