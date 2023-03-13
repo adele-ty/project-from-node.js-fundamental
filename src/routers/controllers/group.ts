@@ -35,14 +35,16 @@ router.get('/allGroups', async (req: Request, res: Response) => {
 })
 
 // get group by id
-router.get('/group/:id', (req: Request, res: Response) => {
-    const group = getGroupById(req.params.id)
-    if (group) {
-    res.send({
-        statusCode: 200,
-        message: 'SUCCESS',
-        data: group
-    })} else {
+router.get('/group/:id', async (req: Request, res: Response) => {
+    const group = await getGroupById(req.params.id)
+    console.log('group: ', group)
+    if (group && group !== 'null') {
+        res.send({
+            statusCode: 200,
+            message: 'SUCCESS',
+            data: JSON.parse(group)
+        })
+    } else {
         res.send({
             statusCode: 400,
             message: 'This group does not exit!',

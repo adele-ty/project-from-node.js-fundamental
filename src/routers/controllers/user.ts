@@ -51,14 +51,18 @@ interface createSchema extends ValidatedRequestSchema {
     [ContainerTypes.Body]: User
 }
 
-router.post('/createUpdateUser', validator.body(createUpdateSchema),
+router.post('/createUser', validator.body(createUpdateSchema),
     async (req: ValidatedRequest<createSchema>, res: Response) => {
-    const user = await getUserById(req.params.id)
-    if (user) {
-        updateUser(req.body)
-    } else {
-        createUser(req.body)
-    }
+    createUser(req.body)
+    res.send({
+        statusCode: 200,
+        message: 'SUCCESS'
+    })
+})
+
+router.post('/updateUser', validator.body(createUpdateSchema),
+    async (req: ValidatedRequest<createSchema>, res: Response) => {
+    updateUser(req.body)
     res.send({
         statusCode: 200,
         message: 'SUCCESS'
