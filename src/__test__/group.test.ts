@@ -12,7 +12,7 @@ describe('Group', () => {
         permissions: ['WRITE', 'READ']
     }
     const userInfo = {
-        id: v4(),
+        id: '4b929ff4-25d6-4261-9b87-c51fd1cb264a',
         email,
         password,
         age: 20,
