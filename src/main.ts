@@ -58,3 +58,5 @@ process.on('unhandledRejection', (reason, promise) => {
 app.listen(3000, function() {
     console.log('api server running at http://127.0.0.1:3000')
 })
+
+export default app
